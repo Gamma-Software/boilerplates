@@ -4,9 +4,14 @@ docker-compose/traefik/ssl/
 docker-compose/homer/assets/
 !docker-compose/homer/assets/*.config.yml
 
-.env
+*.env
 
 docker-compose/bitwarden/nginx-config/
 docker-compose/bitwarden/docker-compose.yml
 
 *.pem
+
+# Matrix
+docker-compose/matrix-irc/nginx.conf
+docker-compose/matrix-irc/letsencrypt
+docker-compose/guacamole/initdb.sql
