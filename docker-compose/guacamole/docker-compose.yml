@@ -15,6 +15,7 @@ services:
   guacamole-mysql-db:
     image: mysql
     container_name: guacamole-mysql-db
+    restart: always
     volumes:
       - guacamole-db:/var/lib/mysql
     env_file:
@@ -39,6 +40,7 @@ services:
   guacamole:
     image: guacamole/guacamole
     container_name: guacamole
+    restart: always
     depends_on:
       - guacd
       - guacamole-mysql-db
