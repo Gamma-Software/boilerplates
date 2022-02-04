@@ -1,26 +1,45 @@
 version: '3'
+
+volumes:
+  proxy-manager-data:
+  proxy-manager-db:
+  ssl-certs:
+
+networks:
+  frontend:
+    external: true
+  backend:
+    external: true
+
 services:
   app:
     image: 'jc21/nginx-proxy-manager:latest'
+    container_name: nginx-proxy-manager
+    restart: always
+    depends_on:
+      - db
     ports:
       - '80:80'
       - '81:81'
       - '443:443'
+    env_file:
+      - proxy_manager.env
     environment:
-      DB_MYSQL_HOST: "db"
-      DB_MYSQL_PORT: 3306
-      DB_MYSQL_USER: "npm"
-      DB_MYSQL_PASSWORD: "npm"
-      DB_MYSQL_NAME: "npm"
+      - DB_MYSQL_HOST=db
     volumes:
-      - ./data:/data
-      - ./letsencrypt:/etc/letsencrypt
+      - proxy-manager-data:/data
+      - proxy-manager-db:/data/mysql
+      - ssl-certs:/etc/letsencrypt
+    networks:
+      - frontend
+      - backend
   db:
     image: 'jc21/mariadb-aria:latest'
-    environment:
-      MYSQL_ROOT_PASSWORD: 'npm'
-      MYSQL_DATABASE: 'npm'
-      MYSQL_USER: 'npm'
-      MYSQL_PASSWORD: 'npm'
+    container_name: nginx-proxy-manager-db
+    restart: always
+    env_file:
+      - db.env
     volumes:
-      - ./data/mysql:/var/lib/mysql
+      - proxy-manager-db:/var/lib/mysql
+    networks:
+      - backend
