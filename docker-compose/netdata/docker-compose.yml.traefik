@@ -2,7 +2,7 @@ version: "3.9"
 
 # Connect to the existing traefik network
 networks:
-  frontend:
+  traefik_default:
     external: true
 
 services:
@@ -26,9 +26,16 @@ services:
       - /etc/os-release:/host/etc/os-release:ro
     command: -u valentin
     networks:
-      - frontend
+      - traefik_default
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.netdata.rule=Host(`netdata.pival.lan`)
+      - traefik.http.routers.netdata.entrypoints=web, websecure
+      - traefik.http.routers.netdata.tls=true
+      - traefik.http.routers.netdata.service=netdata
+      - traefik.http.services.netdata.loadbalancer.server.port=19999
     env_file:
-      - .env
+      - ./.env
 
 volumes:
   netdataconfig:
