@@ -11,8 +11,13 @@ services:
     container_name: homer
     networks:
       - traefik_default
+    ports:
+      - 8083:8080
     volumes:
       - ./assets/:/www/assets
+    environment:
+      - UID=1000
+      - GID=1000
     restart: unless-stopped
     labels:
       - traefik.enable=true
