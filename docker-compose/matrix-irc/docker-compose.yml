@@ -5,6 +5,8 @@ networks:
         external: false
     backend:
         external: true
+    frontend:
+        external: true
 
 volumes:
     synapse-data:
