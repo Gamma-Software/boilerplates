@@ -18,8 +18,8 @@ services:
     restart: always
     volumes:
       - guacamole-db:/var/lib/mysql
-    env_file:
-      - .env # stores the MYSQL_PASSWORD=****
+    #env_file:
+    #  - .env # stores the MYSQL_PASSWORD=****
     networks:
       - backend
 
@@ -53,8 +53,8 @@ services:
     links:
       - guacamole-mysql-db:database
       - guacd:guacd
-    env_file:
-      - .env # stores the MYSQL_PASSWORD=****
+    #env_file:
+    #  - .env # stores the MYSQL_PASSWORD=****
     environment:
       - "GUACD_HOSTNAME=guacd"
       - "GUACD_PORT=4822"
