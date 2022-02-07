@@ -29,11 +29,49 @@ services:
     networks:
       - backend
     volumes:
-      - /etc/prometheus:/etc/prometheus
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-db:/prometheus
     restart: unless-stopped
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
+  
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    networks:
+      - backend
+    command:
+      - '--path.rootfs=/host'
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+      
+  cadvisor:
+    image: google/cadvisor:latest
+    container_name: cadvisor
+    networks:
+      - backend
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    restart: unless-stopped
+  
+  wgexporter:
+    image: mindflavor/prometheus-wireguard-exporter:latest
+    container_name: wgexporter
+    # ports:
+    #   - "8080:8080"
+    networks:
+      - backend
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
 
   loki:
     image: grafana/loki:latest

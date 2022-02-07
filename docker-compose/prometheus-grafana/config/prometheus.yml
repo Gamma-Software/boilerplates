@@ -26,8 +26,19 @@ scrape_configs:
     static_configs:
       - targets: ['cadvisor:8080']
  
-  # Example job for wireguard exporter
-  - job_name: 'wgexporter'
+  - job_name: 'speedtest'
+    metrics_path: /probe
+    params:
+      script: [speedtest]
     static_configs:
-      - targets: ['wgexporter:8080']
+      - targets:
+        - speedtest:9469
+    scrape_interval: 60m
+    scrape_timeout: 90s
+    
+  - job_name: 'script_exporter'
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+        - 127.0.0.1:9469
  
