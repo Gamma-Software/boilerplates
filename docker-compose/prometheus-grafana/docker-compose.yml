@@ -34,3 +34,23 @@ services:
     restart: unless-stopped
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
+
+  loki:
+    image: grafana/loki:latest
+    volumes: ./config/loki.yml:/etc/loki/loki-config.yml
+    restart: always
+    command: -config.file=/etc/loki/loki.yml
+    ports:
+      - 3100:3100
+    networks:
+      - backend
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes: 
+      - /var/log:/var/log
+      - ./config/promtail.yml:/etc/promtail/promtail-config.yml
+    restart: always
+    command: -config.file=/etc/promtail/promtail-config.yml
+    networks:
+      - backend
