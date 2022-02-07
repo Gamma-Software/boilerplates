@@ -75,7 +75,8 @@ services:
 
   loki:
     image: grafana/loki:latest
-    volumes: ./config/loki.yml:/etc/loki/loki-config.yml
+    volumes: 
+      - ./config/loki.yml:/etc/loki/loki-config.yml
     restart: always
     command: -config.file=/etc/loki/loki.yml
     ports:
