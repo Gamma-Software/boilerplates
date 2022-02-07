@@ -1,5 +1,21 @@
 # Installation
 
+## Requirements
+In order to make the monitoring of the docker logs with promtail you need to install the docker plugin as such:
+`docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions`\
+And check if the plugin is installed:
+`docker plugin ls`\
+And append the following to the `/etc/docker/daemon.json` file:
+```
+{
+  "debug": true,
+  "log-driver": "loki",
+  "log-opts": {
+      "loki-url": "https://localhost:3100/loki/api/v1/push",
+      "loki-batch-size": "400"
+  }
+}
+  ```
 ## Deployment
 
 Copy the `docker-compose.yml` template into your project folder and start the container.

@@ -75,8 +75,9 @@ services:
 
   loki:
     image: grafana/loki:latest
+    container_name: loki
     volumes: 
-      - ./config/loki.yml:/etc/loki/loki-config.yml
+      - ./config/loki.yml:/etc/loki/loki.yml
     restart: always
     command: -config.file=/etc/loki/loki.yml
     ports:
@@ -86,10 +87,11 @@ services:
 
   promtail:
     image: grafana/promtail:latest
+    container_name: promtail
     volumes: 
       - /var/log:/var/log
-      - ./config/promtail.yml:/etc/promtail/promtail-config.yml
+      - ./config/promtail.yml:/etc/promtail/promtail.yml
     restart: always
-    command: -config.file=/etc/promtail/promtail-config.yml
+    command: -config.file=/etc/promtail/promtail.yml
     networks:
       - backend
